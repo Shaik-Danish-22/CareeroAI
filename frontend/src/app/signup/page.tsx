@@ -9,6 +9,7 @@ export default function SignupPage() {
   const [mounted, setMounted] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [role, setRole] = useState<'candidate' | 'recruiter'>('candidate')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -19,11 +20,22 @@ export default function SignupPage() {
   }, [])
 
   if (!mounted) {
-    return <div className="h-screen bg-slate-50 animate-pulse" />
+    return <div className="min-h-screen bg-dark-cinematic animate-pulse" />
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
     setError('')
 
@@ -48,94 +60,149 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-emerald-50 flex items-center justify-center p-4">
-      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-            CareeroAi
-          </h1>
-          <p className="text-slate-600">Create your account</p>
-        </div>
+    <div className="min-h-screen bg-dark-cinematic flex items-center justify-center px-4">
+      {/* Animated Blur Shapes */}
+      <div className="absolute top-20 right-20 w-72 h-72 blur-shape-primary" />
+      <div className="absolute bottom-40 left-10 w-80 h-80 blur-shape-secondary opacity-40" />
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
-            {error}
+      {/* Signup Card Container */}
+      <div className="relative z-10 w-full max-w-md animate-fade-in">
+        {/* Card Glow Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-blue-500/10 rounded-3xl blur-2xl -z-10" />
+
+        {/* Glass Card */}
+        <div className="glass-card-dark p-8 space-y-6 border border-white/20">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-900 text-white">
+              CAREERO<span className="text-primary-400">AI</span>
+            </h1>
+            <p className="text-sm text-slate-400 font-medium">
+              Create your account
+            </p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              I am a
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setRole('candidate')}
-                className={`py-3 px-4 rounded-xl border-2 font-medium transition-all ${
-                  role === 'candidate'
-                    ? 'bg-blue-50 border-blue-500 text-blue-700'
-                    : 'bg-white border-slate-300 text-slate-700 hover:border-slate-400'
-                }`}
-              >
-                Candidate
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole('recruiter')}
-                className={`py-3 px-4 rounded-xl border-2 font-medium transition-all ${
-                  role === 'recruiter'
-                    ? 'bg-emerald-50 border-emerald-500 text-emerald-700'
-                    : 'bg-white border-slate-300 text-slate-700 hover:border-slate-400'
-                }`}
-              >
-                Recruiter
-              </button>
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl backdrop-blur">
+              <p className="text-sm text-rose-400 font-medium flex items-center gap-2">
+                <span>⚠️</span>
+                {error}
+              </p>
             </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Role Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                I am a
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole('candidate')}
+                  className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 ${
+                    role === 'candidate'
+                      ? 'glass-card-dark border-primary-400 bg-primary-500/15 shadow-lg shadow-primary-500/20'
+                      : 'border-white/20 bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span className="text-lg block mb-1">👩‍💼</span>
+                  <span className="text-sm">Candidate</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('recruiter')}
+                  className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 ${
+                    role === 'recruiter'
+                      ? 'glass-card-dark border-emerald-400 bg-emerald-500/15 shadow-lg shadow-emerald-500/20'
+                      : 'border-white/20 bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span className="text-lg block mb-1">💼</span>
+                  <span className="text-sm">Recruiter</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Email Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="input-premium"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input-premium"
+                minLength={6}
+                required
+              />
+            </div>
+
+            {/* Confirm Password Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input-premium"
+                required
+              />
+            </div>
+
+            {/* Create Account Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="glass-button w-full"
+            >
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-xs text-slate-500 font-medium">OR</span>
+            <div className="flex-1 h-px bg-white/10" />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              minLength={6}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50"
-          >
-            {loading ? 'Creating account...' : 'Sign Up'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-slate-600">
-          Already have an account?{' '}
-          <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
-            Sign in
-          </Link>
+          {/* Footer */}
+          <p className="text-center text-sm text-slate-400">
+            Already have an account?{' '}
+            <Link href="/login" className="text-primary-400 hover:text-primary-300 font-semibold transition-colors">
+              Sign in
+            </Link>
+          </p>
         </div>
+
+        {/* Bottom Text */}
+        <p className="text-center text-xs text-text-secondary mt-6">
+          By signing up, you agree to our Terms of Service and Privacy Policy
+        </p>
       </div>
     </div>
   )

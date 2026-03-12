@@ -18,186 +18,136 @@ export default function LoginPage() {
     setError('')
 
     try {
-      console.log("🔐 Logging in...")
-      
       const response = await login(email, password)
       const { access_token, role, user_id, email: userEmail } = response.data
 
-      console.log("✅ Login successful - Role:", role)
-      
-      // Store credentials
-      localStorage.setItem("token", access_token)
-      localStorage.setItem("role", role)
-      localStorage.setItem("user_id", user_id)
-      localStorage.setItem("email", userEmail)
+      localStorage.setItem('token', access_token)
+      localStorage.setItem('role', role)
+      localStorage.setItem('user_id', user_id)
+      localStorage.setItem('email', userEmail)
 
-      // Redirect based on role
-      if (role === "recruiter") {
-        console.log("➡️ Redirecting to /recruiter")
-        router.push("/recruiter")
+      if (role === 'recruiter') {
+        router.push('/recruiter')
       } else {
-        console.log("➡️ Redirecting to /candidate")
-        router.push("/candidate")
+        router.push('/candidate')
       }
-      
     } catch (err: any) {
-      console.error("❌ Login failed:", err)
-      setError(err.response?.data?.detail || 'Login failed')
+      setError(err.response?.data?.detail || 'Login failed. Please check your credentials.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-emerald-50 flex items-center justify-center p-4">
-      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-            CareeroAi
-          </h1>
-          <p className="text-slate-600">Sign in to your account</p>
+    <div className="min-h-screen bg-dark-cinematic flex items-center justify-center px-4">
+      {/* Animated Blur Shapes */}
+      <div className="absolute top-20 left-20 w-72 h-72 blur-shape-primary" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 blur-shape-secondary opacity-40" />
+
+      {/* Login Card Container */}
+      <div className="relative z-10 w-full max-w-md animate-fade-in">
+        {/* Card Glow Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-blue-500/10 rounded-3xl blur-2xl -z-10" />
+
+        {/* Glass Card */}
+        <div className="glass-card-dark p-8 space-y-6 border border-white/20">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-900 text-white">
+              CAREERO<span className="text-primary-400">AI</span>
+            </h1>
+            <p className="text-sm text-slate-400 font-medium">
+              Welcome back
+            </p>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl backdrop-blur">
+              <p className="text-sm text-rose-400 font-medium flex items-center gap-2">
+                <span>⚠️</span>
+                {error}
+              </p>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="input-premium"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300 block">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input-premium"
+                required
+              />
+            </div>
+
+            {/* Remember & Forgot */}
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" className="w-4 h-4 rounded border-white/30 accent-primary-600" />
+                <span className="text-slate-400">Remember me</span>
+              </label>
+              <Link href="#" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
+                Forgot?
+              </Link>
+            </div>
+
+            {/* Sign In Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="glass-button w-full"
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-xs text-slate-500 font-medium">OR</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-sm text-slate-400">
+            Don't have an account?{' '}
+            <Link href="/signup" className="text-primary-400 hover:text-primary-300 font-semibold transition-colors">
+              Create one
+            </Link>
+          </p>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50"
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-slate-600">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-blue-600 hover:text-blue-700 font-semibold">
-            Sign up
-          </Link>
-        </div>
+        {/* Bottom Text */}
+        <p className="text-center text-xs text-slate-500 mt-6">
+          By signing in, you agree to our Terms of Service and Privacy Policy
+        </p>
       </div>
     </div>
   )
 }
-// 1
-// 'use client'
-
-// import { useState } from 'react'
-// import { useRouter } from 'next/navigation'
-// import Link from 'next/link'
-// import { login } from '@/lib/api'
-
-// export default function LoginPage() {
-//   const [email, setEmail] = useState('')
-//   const [password, setPassword] = useState('')
-//   const [loading, setLoading] = useState(false)
-//   const [error, setError] = useState('')
-//   const router = useRouter()
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault()
-//     setLoading(true)
-//     setError('')
-
-//     try {
-//       const response = await login(email, password)
-//       // const { access_token, role, user_id } = response.data
-      
-
-//     const { access_token, role, user_id } = response.data
-
-// localStorage.setItem("token", access_token)
-// localStorage.setItem("role", role)
-// localStorage.setItem("user_id", user_id)
-
-// if (role === "recruiter") {
-//   router.push("/recruiter")
-// } else {
-//   router.push("/candidate")
-// }
-//   //     localStorage.setItem('token', access_token)
-//   //     localStorage.setItem('role', role)
-//   //     localStorage.setItem('user_id', user_id)
-
-//   //     if (role === 'recruiter') {
-//   //       router.push('/recruiter')
-//   //     } else {
-//   //       router.push('/candidate')
-//   //     }
-//     } catch (err: any) {
-//       setError(err.response?.data?.detail || 'Login failed')
-//     } finally {
-//       setLoading(false)
-//     }
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-emerald-50 flex items-center justify-center p-4">
-//       <div className="glass rounded-2xl p-8 w-full max-w-md shadow-2xl">
-//         <div className="text-center mb-8">
-//           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-//             CareeroAi
-//           </h1>
-//           <p className="text-slate-600">Sign in to your account</p>
-//         </div>
-
-//         {error && (
-//           <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
-//             {error}
-//           </div>
-//         )}
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <label className="block text-sm font-medium text-slate-700 mb-1">
-//               Email
-//             </label>
-//             <input
-//               type="email"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//               required
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium text-slate-700 mb-1">
-//               Password
-//             </label>
-//             <input
-//               type="password"
 //               value={password}
 //               onChange={(e) => setPassword(e.target.value)}
 //               className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"

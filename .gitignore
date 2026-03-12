@@ -1,25 +1,22 @@
-# Python
-venv/
-backend/venv/
+# Python cache
 __pycache__/
 *.pyc
-*.pyo
+
+# Python virtual env
+venv/
+backend/venv/
+
+# Next.js
+.next/
+frontend/.next/
 
 # Node
 node_modules/
 frontend/node_modules/
 
-# Next.js
-.next/
-out/
-
-# Environment
+# Env files
 .env
 .env.local
-
-# Builds
-dist/
-build/
 
 # OS
 .DS_Store

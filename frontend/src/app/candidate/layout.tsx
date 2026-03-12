@@ -7,6 +7,7 @@ import ChatAssistant from '@/components/ChatAssistant'
 
 export default function CandidateLayout({ children }: { children: React.ReactNode }) {
   const [isAuthorized, setIsAuthorized] = useState(false)
+  const [isChecking, setIsChecking] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
@@ -18,21 +19,51 @@ export default function CandidateLayout({ children }: { children: React.ReactNod
     } else {
       setIsAuthorized(true)
     }
+    setIsChecking(false)
   }, [router])
+
+  if (isChecking) {
+    return (
+      <div className="h-screen bg-dark-cinematic flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin inline-flex items-center justify-center w-12 h-12 mb-4">
+            <div className="w-12 h-12 border-4 border-blue-500/30 border-t-primary-400 rounded-full" />
+          </div>
+          <p className="text-slate-300 font-medium">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!isAuthorized) {
     return (
-      <div className="h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-slate-600 text-lg">Checking authorization...</div>
+      <div className="h-screen bg-dark-cinematic flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin inline-flex items-center justify-center w-12 h-12 mb-4">
+            <div className="w-12 h-12 border-4 border-blue-500/30 border-t-primary-400 rounded-full" />
+          </div>
+          <p className="text-slate-300 font-medium">Verifying access...</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-slate-50">
-      <Sidebar role="candidate" />
-      <main className="flex-1 overflow-auto">{children}</main>
-      <ChatAssistant />
+    <div className="flex h-screen bg-dark-cinematic overflow-hidden">
+      {/* Sidebar */}
+      <div className="flex-shrink-0 border-r border-white/10">
+        <Sidebar role="candidate" />
+      </div>
+
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-auto transition-smooth bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950">
+        {children}
+      </main>
+
+      {/* Chat Assistant */}
+      <div className="flex-shrink-0 border-l border-white/10">
+        <ChatAssistant />
+      </div>
     </div>
   )
 }
