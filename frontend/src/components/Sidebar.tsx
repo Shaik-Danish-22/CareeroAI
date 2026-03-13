@@ -11,7 +11,9 @@ import {
   Briefcase, 
   User, 
   Briefcase as BriefcaseIcon,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -29,14 +31,15 @@ export default function Sidebar({ role }: SidebarProps) {
   }, [])
 
   if (!mounted) {
-    return <div className="w-64 h-screen bg-gradient-to-b from-slate-900 to-slate-950 animate-pulse" />
+    return <div className="w-64 h-screen bg-white/50 backdrop-blur-xl animate-pulse rounded-lg border border-slate-200" />
   }
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('role')
     localStorage.removeItem('user_id')
-    router.push('/login')
+    localStorage.removeItem('email')
+    router.push('/')
   }
 
   const recruiterLinks = [
@@ -60,19 +63,19 @@ export default function Sidebar({ role }: SidebarProps) {
       {/* Mobile Toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white/30 hover:bg-white/50 border border-slate-300 transition-all text-slate-700"
         aria-label="Toggle sidebar"
       >
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+        {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
       {/* Sidebar */}
       <nav
         className={`
           fixed lg:static inset-y-0 left-0 z-40 w-64 
-          backdrop-blur-xl bg-gradient-to-b from-slate-900/95 to-slate-950/95 border-r border-white/10
+          bg-white
+          border-r border-slate-200
+          shadow-sm
           transform transition-transform duration-300 ease-in-out
           lg:transform-none overflow-y-auto
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -80,17 +83,18 @@ export default function Sidebar({ role }: SidebarProps) {
         `}
       >
         {/* Logo Section */}
-        <div className="flex-shrink-0 border-b border-white/10 p-6 bg-gradient-to-br from-slate-800/50 to-transparent">
-          <h2 className="text-2xl font-900 bg-gradient-to-r from-blue-400 to-primary-400 bg-clip-text text-transparent">
-            CAREERO<span className="text-primary-400">AI</span>
+        <div className="flex-shrink-0 border-b border-slate-200 p-6">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            CareeroAI
           </h2>
-          <p className="text-xs text-slate-400 mt-2 capitalize font-medium tracking-widest">{role}</p>
+          <p className="text-xs text-slate-600 mt-2 capitalize font-medium tracking-widest">{role}</p>
         </div>
 
         {/* Navigation Links */}
         <nav className="flex-1 px-4 py-6 space-y-2">
           {links.map((link) => {
             const isActive = pathname === link.href
+            const Icon = link.icon
             return (
               <Link
                 key={link.href}
@@ -101,26 +105,24 @@ export default function Sidebar({ role }: SidebarProps) {
                   transition-all duration-300 ease-out
                   ${
                     isActive
-                      ? 'bg-gradient-to-r from-blue-600/35 to-primary-600/25 text-white border-l-2 border-blue-400 shadow-lg shadow-blue-500/20'
-                      : 'text-slate-300 border-l-2 border-transparent hover:text-white hover:bg-blue-500/15 hover:shadow-lg hover:shadow-blue-500/10'
+                      ? 'bg-purple-100 text-purple-600 border-l-2 border-purple-600 shadow-lg shadow-purple-500/20'
+                      : 'text-slate-700 border-l-2 border-transparent hover:bg-purple-50 hover:text-slate-900'
                   }
                 `}
               >
-                {link.icon && <link.icon className="w-5 h-5 flex-shrink-0 text-slate-400 group-hover:text-blue-300" />}
+                <Icon className="w-5 h-5" />
                 <span className="flex-1">{link.label}</span>
-                {isActive && (
-                  <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                )}
+                {isActive && <div className="w-2 h-2 bg-purple-600 rounded-full" />}
               </Link>
             )
           })}
         </nav>
 
         {/* Divider */}
-        <div className="border-t border-white/10" />
+        <div className="border-t border-slate-200" />
 
         {/* Chat & Logout Section */}
-        <div className="flex-shrink-0 p-4 space-y-3 bg-gradient-to-t from-slate-950/50 to-transparent">
+        <div className="flex-shrink-0 p-4 space-y-3">
           {/* Messaging System */}
           <div className="mb-2">
             <MessagingSystem />
@@ -129,14 +131,9 @@ export default function Sidebar({ role }: SidebarProps) {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className={`
-              w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold 
-              transition-all duration-200
-              text-slate-400 hover:text-white hover:bg-rose-500/10 hover:border-rose-500/30
-              border border-transparent
-            `}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all text-slate-700 hover:text-red-700 hover:bg-red-100 border border-transparent hover:border-red-300"
           >
-            <span className="text-lg">🚪</span>
+            <LogOut className="w-5 h-5" />
             <span>Logout</span>
           </button>
         </div>
@@ -145,9 +142,11 @@ export default function Sidebar({ role }: SidebarProps) {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/20 z-30 lg:hidden transition-opacity duration-300 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
+        />
+      )}
         />
       )}
     </>

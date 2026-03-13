@@ -137,6 +137,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getRecommendations, applyToJob } from '@/lib/api'
+import Button from '@/components/ui/Button'
+import GlassPanel from '@/components/ui/GlassPanel'
+import Card from '@/components/ui/Card'
+import { Zap, FileText } from 'lucide-react'
 
 export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<any[]>([])
@@ -189,10 +193,10 @@ export default function RecommendationsPage() {
           <p className="text-slate-600 mb-8">Jobs matched to your skills and experience</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="glass rounded-2xl p-6 animate-pulse">
-                <div className="h-6 bg-slate-200 rounded mb-4" />
-                <div className="h-4 bg-slate-200 rounded mb-2" />
-              </div>
+              <Card key={i} className="animate-pulse">
+                <div className="h-6 bg-white/10 rounded mb-4" />
+                <div className="h-4 bg-white/10 rounded mb-2" />
+              </Card>
             ))}
           </div>
         </div>
@@ -207,26 +211,20 @@ export default function RecommendationsPage() {
         <p className="text-slate-600 mb-8">Jobs matched to your skills and experience</p>
 
         {recommendations.length === 0 ? (
-          <div className="glass rounded-2xl p-12 text-center">
+          <GlassPanel className="rounded-2xl p-12 text-center">
             <p className="text-slate-600 mb-4">
               No recommendations yet. Complete your resume to get personalized job matches!
             </p>
-            <button
-              onClick={() => router.push('/candidate/resume')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
+            <Button onClick={() => router.push('/candidate/resume')}>
               Complete Resume
-            </button>
-          </div>
+            </Button>
+          </GlassPanel>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recommendations.map((job) => (
-              <div
-                key={job.id || job.job_id}
-                className="glass rounded-2xl p-6 hover:shadow-xl transition-all relative flex flex-col"
-              >
+              <Card key={job.id || job.job_id} className="relative flex flex-col">
                 {/* Match Score Badge */}
-                <div className="absolute top-4 right-4 px-3 py-1 bg-emerald-500 text-white rounded-full text-sm font-bold">
+                <div className="absolute top-4 right-4 px-3 py-1 bg-purple-500 text-white rounded-full text-sm font-bold">
                   {Math.round(job.match_score || job.match_percentage || 0)}% Match
                 </div>
                 
@@ -235,7 +233,7 @@ export default function RecommendationsPage() {
                 
                 {/* Location Badge */}
                 <div className="mb-3">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm">
+                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-lg text-sm border border-purple-500/30">
                     {job.location || 'Remote'}
                   </span>
                 </div>
@@ -248,12 +246,12 @@ export default function RecommendationsPage() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {(job.matched_skills || job.skills || []).slice(0, 5).map((skill: string, idx: number) => (
-                        <span key={idx} className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-medium">
+                        <span key={idx} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-xs font-medium border border-purple-500/30">
                           {skill}
                         </span>
                       ))}
                       {(job.matched_skills || job.skills || []).length > 5 && (
-                        <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">
+                        <span className="px-2 py-1 bg-white/10 text-slate-300 rounded text-xs">
                           +{(job.matched_skills || job.skills).length - 5}
                         </span>
                       )}
@@ -263,21 +261,24 @@ export default function RecommendationsPage() {
 
                 {/* Action Buttons */}
                 <div className="mt-auto pt-4 space-y-2">
-                  <button
+                  <Button
                     onClick={() => handleApply(job.id || job.job_id)}
                     disabled={applying === (job.id || job.job_id)}
-                    className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 font-semibold"
+                    className="w-full flex items-center justify-center gap-2"
                   >
-                    {applying === (job.id || job.job_id) ? 'Applying...' : '📝 Apply to Job'}
-                  </button>
-                  <button
+                    <FileText className="w-4 h-4" />
+                    {applying === (job.id || job.job_id) ? 'Applying...' : 'Apply to Job'}
+                  </Button>
+                  <Button
+                    variant="secondary"
                     onClick={() => handleInterview(job.id || job.job_id)}
-                    className="w-full px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
+                    className="w-full flex items-center justify-center gap-2"
                   >
-                    🎤 Start AI Interview
-                  </button>
+                    <Zap className="w-4 h-4" />
+                    Start AI Interview
+                  </Button>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         )}

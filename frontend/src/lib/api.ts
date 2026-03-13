@@ -267,4 +267,15 @@ export const getCandidateRecommendations = (
   return api.get(`/recruiter/job/${jobId}/recommendations?top_n=${topN}`)
 }
 
+// ================================
+// CHAT & AI ASSISTANT
+// ================================
+export const chatWithAssistant = (message: string, conversationHistory: any[] = []) => {
+  console.log("💬 Sending chat message to AI assistant")
+  return api.post("/messages/chat/assistant", {
+    message,
+    conversation_history: conversationHistory
+  })
+}
+
 export default api

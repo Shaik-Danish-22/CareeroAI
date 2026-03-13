@@ -4,10 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { login } from '@/lib/api'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -39,32 +41,28 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-cinematic flex items-center justify-center px-4">
-      {/* Animated Blur Shapes */}
-      <div className="absolute top-20 left-20 w-72 h-72 blur-shape-primary" />
-      <div className="absolute bottom-40 right-10 w-80 h-80 blur-shape-secondary opacity-40" />
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
       {/* Login Card Container */}
-      <div className="relative z-10 w-full max-w-md animate-fade-in">
-        {/* Card Glow Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-blue-500/10 rounded-3xl blur-2xl -z-10" />
+      <div className="w-full max-w-md">
+        {/* Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 via-white/0 to-indigo-200/40 rounded-3xl blur-3xl -z-10" />
 
-        {/* Glass Card */}
-        <div className="glass-card-dark p-8 space-y-6 border border-white/20">
+        {/* Glass Panel - Light Theme */}
+        <div className="relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-900 text-white">
-              CAREERO<span className="text-primary-400">AI</span>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              CareeroAI
             </h1>
-            <p className="text-sm text-slate-400 font-medium">
+            <p className="text-sm text-slate-600 font-medium">
               Welcome back
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl backdrop-blur">
-              <p className="text-sm text-rose-400 font-medium flex items-center gap-2">
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-sm text-red-700 font-medium flex items-center gap-2">
                 <span>⚠️</span>
                 {error}
               </p>
@@ -75,7 +73,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-300 block">
+              <label className="block text-sm font-semibold text-slate-700">
                 Email Address
               </label>
               <input
@@ -83,33 +81,49 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="input-premium"
+                className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
                 required
               />
             </div>
 
-            {/* Password Input */}
+            {/* Password Input with Visibility Toggle */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-300 block">
+              <label className="block text-sm font-semibold text-slate-700">
                 Password
               </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="input-premium"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400 pr-12"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-900 transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-white/30 accent-primary-600" />
-                <span className="text-slate-400">Remember me</span>
+                <input 
+                  type="checkbox" 
+                  className="w-4 h-4 rounded border-slate-300 accent-purple-600" 
+                />
+                <span className="text-slate-600">Remember me</span>
               </label>
-              <Link href="#" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
+              <Link href="#" className="text-purple-600 hover:text-purple-700 font-medium transition-colors">
                 Forgot?
               </Link>
             </div>
@@ -118,7 +132,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="glass-button w-full"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 font-semibold disabled:opacity-50"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -126,38 +140,28 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-slate-200" />
             <span className="text-xs text-slate-500 font-medium">OR</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-slate-200" />
           </div>
 
           {/* Footer */}
-          <p className="text-center text-sm text-slate-400">
+          <p className="text-center text-sm text-slate-600">
             Don't have an account?{' '}
-            <Link href="/signup" className="text-primary-400 hover:text-primary-300 font-semibold transition-colors">
+            <Link href="/signup" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
               Create one
             </Link>
           </p>
         </div>
 
         {/* Bottom Text */}
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <p className="text-center text-xs text-slate-600 mt-6">
           By signing in, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>
     </div>
   )
 }
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//               required
-//             />
-//           </div>
-
-//           <button
-//             type="submit"
-//             disabled={loading}
 //             className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50"
 //           >
 //             {loading ? 'Signing in...' : 'Sign In'}

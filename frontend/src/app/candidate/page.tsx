@@ -4,16 +4,23 @@ import { useEffect, useState } from 'react'
 import { getRecommendations } from '@/lib/api'
 import Link from 'next/link'
 import JobCard from '@/components/JobCard'
+import GreetingBanner from '@/components/GreetingBanner'
+import StatsCard from '@/components/ui/StatsCard'
+import Card from '@/components/ui/Card'
+import Button from '@/components/ui/Button'
+import { TrendingUp, Target, Zap } from 'lucide-react'
 
 export default function CandidateDashboard() {
   const [recommendations, setRecommendations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [userName, setUserName] = useState('Candidate')
+  const [userName, setUserName] = useState('there')
 
   useEffect(() => {
     const email = localStorage.getItem('email')
     if (email) {
-      const name = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1)
+      const name =
+        email.split('@')[0].charAt(0).toUpperCase() +
+        email.split('@')[0].slice(1)
       setUserName(name)
     }
     fetchRecommendations()
@@ -33,56 +40,53 @@ export default function CandidateDashboard() {
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Personalized Greeting */}
-        <div className="glass-card-dark rounded-xl px-6 py-4 mb-8 border border-emerald-500/20 bg-gradient-to-r from-emerald-900/30 to-transparent">
-          <p className="text-white text-lg font-semibold">
-            Hi {userName} 👋
-          </p>
-          <p className="text-slate-300 text-sm mt-1">
-            Welcome back! Here are your recommended opportunities based on your profile.
-          </p>
-        </div>
 
-        {/* Header */}
-        <div className="mb-12 flex items-end justify-between">
-          <div>
-            <h1 className="text-5xl font-900 text-white mb-2">Recommended Jobs</h1>
-            <p className="text-slate-300">Discover curated opportunities matched to your profile</p>
-          </div>
-        </div>
+        {/* Greeting */}
+        <GreetingBanner name={userName} role="candidate" />
 
-        {/* Quick Stats */}
+        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Found Matches</p>
-            <p className="text-4xl font-900 text-white mt-3">{recommendations.length}</p>
-            <p className="text-slate-400 text-xs mt-2">Based on your profile</p>
-          </div>
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Profile Strength</p>
-            <p className="text-4xl font-900 text-blue-300 mt-3">85%</p>
-            <p className="text-slate-400 text-xs mt-2">Complete your resume to improve</p>
-          </div>
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Avg Match Score</p>
-            <p className="text-4xl font-900 text-emerald-300 mt-3">72%</p>
-            <p className="text-slate-400 text-xs mt-2">Your average match percentage</p>
-          </div>
+          <StatsCard
+            title="Found Matches"
+            value={recommendations.length}
+            subtitle="Based on your profile"
+            icon={<Target className="w-8 h-8" />}
+          />
+
+          <StatsCard
+            title="Profile Strength"
+            value="85%"
+            subtitle="Complete your resume to improve"
+            icon={<TrendingUp className="w-8 h-8" />}
+          />
+
+          <StatsCard
+            title="Avg Match Score"
+            value="72%"
+            subtitle="Your average match percentage"
+            icon={<Zap className="w-8 h-8" />}
+          />
         </div>
 
         {/* Recommendations */}
         <div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">
+            Recommended Jobs
+          </h2>
+
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="rounded-xl p-6 animate-pulse h-64 bg-white/5 backdrop-blur-md border border-white/10" />
+              {[1,2,3,4,5,6].map((i) => (
+                <div key={i} className="h-64 bg-white rounded-2xl border border-slate-200 shadow-lg animate-pulse" />
               ))}
             </div>
+
           ) : recommendations.length > 0 ? (
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendations.map((job: any) => (
-                <JobCard 
-                  key={job.job_id} 
+                <JobCard
+                  key={job.job_id}
                   job={{
                     id: job.job_id,
                     title: job.title,
@@ -91,31 +95,42 @@ export default function CandidateDashboard() {
                     job_type: 'Full-time',
                     skills: job.skills || [],
                     match_percentage: job.match_score,
-                  }} 
-                  variant="candidate" 
+                  }}
+                  variant="candidate"
                 />
               ))}
             </div>
+
           ) : (
-            <div className="glass-card-dark rounded-2xl p-16 text-center border border-dashed border-white/20">
-              <p className="text-white text-2xl font-bold mb-3">📄 No Recommendations Yet</p>
-              <p className="text-slate-300 mb-8">Complete your resume and skills to unlock personalized job recommendations powered by AI</p>
-              <div className="flex gap-4 justify-center">
-                <Link
-                  href="/candidate/resume"
-                  className="glass-button px-6 py-2.5 inline-block"
-                >
-                  Complete Your Resume
+
+            <Card className="p-16 text-center border-dashed border-2">
+              <p className="text-slate-900 text-2xl font-bold mb-3">
+                📄 No Recommendations Yet
+              </p>
+
+              <p className="text-slate-600 mb-8">
+                Complete your resume and skills to unlock personalized job recommendations powered by AI
+              </p>
+
+              <div className="flex gap-4 justify-center flex-wrap">
+
+                <Link href="/candidate/resume">
+                  <Button variant="primary">
+                    Complete Your Resume
+                  </Button>
                 </Link>
-                <Link
-                  href="/candidate/profile"
-                  className="glass-button-secondary px-6 py-2.5 inline-block"
-                >
-                  Update Profile
+
+                <Link href="/candidate/profile">
+                  <Button variant="secondary">
+                    Update Profile
+                  </Button>
                 </Link>
+
               </div>
-            </div>
+            </Card>
+
           )}
+
         </div>
       </div>
     </div>

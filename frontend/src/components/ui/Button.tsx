@@ -1,65 +1,72 @@
-'use client'
+import { ReactNode } from 'react'
 
-import React from 'react'
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger'
+interface ButtonProps {
+  children: ReactNode
+  onClick?: () => void
+  className?: string
+  variant?: 'primary' | 'secondary' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
-  isLoading?: boolean
-  fullWidth?: boolean
-  children: React.ReactNode
+  disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export default function Button({
+  children,
+  onClick,
+  className = '',
   variant = 'primary',
   size = 'md',
-  isLoading = false,
-  fullWidth = false,
-  className = '',
-  children,
-  disabled,
-  ...props
+  disabled = false,
+  type = 'button'
 }: ButtonProps) {
-  const baseStyles =
-    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+  const baseClass = `
+    font-semibold
+    rounded-xl
+    transition-all duration-300
+    disabled:opacity-50 disabled:cursor-not-allowed
+  `
 
-  const variantStyles = {
-    primary:
-      'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-md hover:shadow-lg focus-visible:outline-primary-500',
-    secondary:
-      'bg-slate-200 text-slate-900 hover:bg-slate-300 active:bg-slate-400 focus-visible:outline-slate-500',
-    accent:
-      'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-md hover:shadow-lg focus-visible:outline-emerald-500',
-    ghost: 'text-slate-700 hover:bg-slate-100 active:bg-slate-200 focus-visible:outline-slate-500',
-    danger:
-      'bg-rose-500 text-white hover:bg-rose-600 active:bg-rose-700 shadow-md hover:shadow-lg focus-visible:outline-rose-500',
-  }
+  const sizeClass = {
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3 text-base',
+    lg: 'px-8 py-4 text-lg'
+  }[size]
 
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2.5 text-base',
-    lg: 'px-6 py-3 text-lg',
-  }
-
-  const widthClass = fullWidth ? 'w-full' : ''
+  const variantClass = {
+    primary: `
+      bg-gradient-to-r from-purple-600 to-indigo-600
+      text-white
+      hover:shadow-lg
+      hover:shadow-purple-600/50
+      hover:scale-[1.05]
+      active:scale-95
+    `,
+    secondary: `
+      bg-white/30
+      text-slate-700
+      border border-slate-300
+      hover:bg-white/50
+      hover:shadow-lg
+      hover:shadow-purple-500/20
+      hover:scale-[1.02]
+    `,
+    ghost: `
+      bg-transparent
+      text-slate-700
+      hover:bg-white/40
+      border border-slate-300
+      hover:scale-[1.02]
+    `
+  }[variant]
 
   return (
     <button
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthClass} ${className}`}
-      disabled={disabled || isLoading}
-      {...props}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseClass} ${sizeClass} ${variantClass} ${className}`}
     >
-      {isLoading ? (
-        <>
-          <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-          </svg>
-          Loading...
-        </>
-      ) : (
-        children
-      )}
+      {children}
     </button>
   )
 }
