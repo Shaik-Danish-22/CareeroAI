@@ -1,49 +1,37 @@
-'use client'
-
-import React from 'react'
+import { ReactNode } from 'react'
 
 interface CardProps {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
-  interactive?: boolean
-  elevated?: boolean
-  glass?: boolean
-  padding?: 'sm' | 'md' | 'lg'
   onClick?: () => void
+  hoverable?: boolean
 }
 
-export default function Card({
-  children,
-  className = '',
-  interactive = false,
-  elevated = false,
-  glass = false,
-  padding = 'md',
+export default function Card({ 
+  children, 
+  className = '', 
   onClick,
+  hoverable = true 
 }: CardProps) {
-  const paddingStyles = {
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-  }
-
-  const baseStyles = 'rounded-xl transition-all duration-300'
-  const borderStyles = 'border'
-  const interactiveStyles = interactive ? 'hover:shadow-hover hover:-translate-y-1 cursor-pointer' : ''
-  const elevatedStyles = elevated ? 'shadow-lg border-slate-100 bg-white' : 'shadow-md'
-  const glassStyles = glass ? 'glass' : 'bg-white border-border-color'
+  const baseClass = `
+    rounded-2xl
+    bg-white
+    border border-slate-200
+    shadow-lg
+    transition-all duration-300 ease-out
+  `
+  
+  const hoverClass = hoverable ? `
+    hover:shadow-xl
+    hover:border-purple-300
+    hover:scale-[1.02]
+    hover:-translate-y-1
+  ` : ''
 
   return (
-    <div
-      className={`${baseStyles} ${borderStyles} ${interactiveStyles} ${glassStyles} ${elevatedStyles} ${paddingStyles[padding]} ${className}`}
+    <div 
+      className={`${baseClass} ${hoverClass} ${className}`}
       onClick={onClick}
-      role={interactive ? 'button' : undefined}
-      tabIndex={interactive ? 0 : undefined}
-      onKeyDown={(e) => {
-        if (interactive && (e.key === 'Enter' || e.key === ' ')) {
-          onClick?.()
-        }
-      }}
     >
       {children}
     </div>

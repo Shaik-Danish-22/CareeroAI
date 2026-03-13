@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react'
 import { getRecommendations, getSkillGaps } from '@/lib/api'
 import Link from 'next/link'
+import Button from '@/components/ui/Button'
+import GlassPanel from '@/components/ui/GlassPanel'
+import Card from '@/components/ui/Card'
+import { BookOpen, Target, CheckCircle, TrendingUp } from 'lucide-react'
 
 export default function SkillGapAnalysisPage() {
   const [jobs, setJobs] = useState<any[]>([])
@@ -53,11 +57,11 @@ export default function SkillGapAnalysisPage() {
         </p>
 
         {/* Job Selection */}
-        <div className="glass rounded-2xl p-6 mb-6">
+        <GlassPanel className="rounded-2xl p-6 mb-6">
           <h2 className="text-xl font-semibold text-slate-900 mb-4">Select a Job to Analyze</h2>
           {initialLoading ? (
-            <div className="animate-pulse">
-              <div className="h-12 bg-slate-200 rounded-lg mb-3" />
+            <div className="animate-pulse space-y-3">
+              <div className="h-12 bg-slate-200 rounded-lg" />
               <div className="h-12 bg-slate-200 rounded-lg" />
             </div>
           ) : jobs.length > 0 ? (
@@ -69,8 +73,8 @@ export default function SkillGapAnalysisPage() {
                   disabled={loading}
                   className={`p-4 rounded-xl border-2 text-left transition-all ${
                     selectedJob === (job.id || job.job_id)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-slate-200 hover:border-blue-300 bg-white'
+                      ? 'border-purple-500 bg-purple-100'
+                      : 'border-slate-200 hover:border-slate-300 bg-white'
                   } disabled:opacity-50`}
                 >
                   <div className="flex justify-between items-start">
@@ -81,7 +85,7 @@ export default function SkillGapAnalysisPage() {
                       </p>
                     </div>
                     {job.match_score && (
-                      <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                      <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-300">
                         {Math.round(job.match_score)}% Match
                       </span>
                     )}
@@ -92,32 +96,30 @@ export default function SkillGapAnalysisPage() {
           ) : (
             <div className="text-center py-8">
               <p className="text-slate-600 mb-4">No job recommendations available yet.</p>
-              <Link
-                href="/candidate/resume"
-                className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                Complete Your Resume
+              <Link href="/candidate/resume">
+                <Button>Complete Your Resume</Button>
               </Link>
             </div>
           )}
-        </div>
+        </GlassPanel>
 
         {/* Loading State */}
         {loading && (
-          <div className="glass rounded-2xl p-8">
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-              <span className="ml-4 text-slate-600">Analyzing your skills...</span>
-            </div>
-          </div>
+          <GlassPanel className="rounded-2xl p-8 flex items-center justify-center gap-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500" />
+            <span className="text-slate-700">Analyzing your skills...</span>
+          </GlassPanel>
         )}
 
         {/* Skill Gap Results */}
         {skillGapData && !loading && (
           <div className="space-y-6">
             {/* Match Score */}
-            <div className="glass rounded-2xl p-6">
-              <h2 className="text-xl font-semibold text-slate-900 mb-4">Overall Match Score</h2>
+            <GlassPanel className="rounded-2xl p-6">
+              <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Target className="w-5 h-5" />
+                Overall Match Score
+              </h2>
               <div className="flex items-center gap-6">
                 <div className="relative w-32 h-32">
                   <svg className="transform -rotate-90 w-32 h-32">
@@ -128,7 +130,7 @@ export default function SkillGapAnalysisPage() {
                       stroke="currentColor"
                       strokeWidth="12"
                       fill="transparent"
-                      className="text-slate-200"
+                      className="text-white/10"
                     />
                     <circle
                       cx="64"
@@ -139,7 +141,7 @@ export default function SkillGapAnalysisPage() {
                       fill="transparent"
                       strokeDasharray={`${2 * Math.PI * 56}`}
                       strokeDashoffset={`${2 * Math.PI * 56 * (1 - (skillGapData.match_score || 0) / 100)}`}
-                      className="text-blue-600 transition-all duration-1000"
+                      className="text-purple-500 transition-all duration-1000"
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -158,58 +160,58 @@ export default function SkillGapAnalysisPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </GlassPanel>
 
             {/* Matching Skills */}
             {skillGapData.matching_skills?.length > 0 && (
-              <div className="glass rounded-2xl p-6">
+              <GlassPanel className="rounded-2xl p-6">
                 <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="text-2xl">✅</span>
+                  <CheckCircle className="w-5 h-5 text-emerald-600" />
                   Skills You Have
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {skillGapData.matching_skills.map((skill: string, idx: number) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium"
+                      className="px-4 py-2 bg-emerald-500/20 text-emerald-300 rounded-lg text-sm font-medium border border-emerald-500/30"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
-              </div>
+              </GlassPanel>
             )}
 
             {/* Missing Skills */}
             {skillGapData.missing_skills?.length > 0 && (
-              <div className="glass rounded-2xl p-6">
+              <GlassPanel className="rounded-2xl p-6">
                 <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="text-2xl">📖</span>
+                  <BookOpen className="w-5 h-5 text-blue-600" />
                   Skills to Learn
                 </h2>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {skillGapData.missing_skills.map((skill: string, idx: number) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium"
+                      className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium border border-blue-300"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
-                <div className="bg-blue-50 rounded-xl p-4">
-                  <p className="text-sm text-blue-900">
+                <div className="bg-purple-100/50 rounded-xl p-4 border border-purple-300">
+                  <p className="text-sm text-slate-700">
                     💡 <strong>Tip:</strong> Focus on learning these skills to increase your match score!
                   </p>
                 </div>
-              </div>
+              </GlassPanel>
             )}
 
             {/* AI Course Recommendations */}
             {skillGapData.recommendations && skillGapData.recommendations.length > 0 && (
-              <div className="glass rounded-2xl p-6">
+              <GlassPanel className="rounded-2xl p-6">
                 <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-2">
-                  <span className="text-2xl">🎓</span>
+                  <TrendingUp className="w-5 h-5 text-purple-600" />
                   AI-Recommended Free Courses
                 </h2>
                 
@@ -217,7 +219,7 @@ export default function SkillGapAnalysisPage() {
                   <div key={skillIdx} className="mb-8 last:mb-0">
                     {/* Skill Header */}
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-bold text-lg">
+                      <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-bold text-lg border border-purple-300">
                         {item.skill}
                       </span>
                       <span className="text-sm text-slate-600">
@@ -228,10 +230,7 @@ export default function SkillGapAnalysisPage() {
                     {/* Courses for this skill */}
                     <div className="grid gap-4">
                       {(item.courses || []).map((course: any, courseIdx: number) => (
-                        <div
-                          key={courseIdx}
-                          className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border-2 border-purple-200 hover:shadow-lg transition-all"
-                        >
+                        <Card key={courseIdx} className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20">
                           <div className="flex items-start justify-between gap-6">
                             <div className="flex-1">
                               <h3 className="text-lg font-bold text-slate-900 mb-2">
@@ -239,13 +238,13 @@ export default function SkillGapAnalysisPage() {
                               </h3>
                               
                               <div className="flex flex-wrap gap-2 mb-3">
-                                <span className="px-3 py-1 bg-white text-blue-700 rounded-lg text-sm font-medium">
+                                <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
                                   📚 {course.provider}
                                 </span>
-                                <span className="px-3 py-1 bg-white text-emerald-700 rounded-lg text-sm font-medium">
+                                <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
                                   ⏱️ {course.duration}
                                 </span>
-                                <span className="px-3 py-1 bg-white text-purple-700 rounded-lg text-sm font-medium">
+                                <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
                                   📊 {course.level}
                                 </span>
                               </div>
@@ -261,40 +260,34 @@ export default function SkillGapAnalysisPage() {
                               href={course.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all text-sm font-bold whitespace-nowrap shadow-lg"
+                              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all text-sm font-bold whitespace-nowrap"
                             >
                               Start Learning →
                             </a>
                           </div>
-                        </div>
+                        </Card>
                       ))}
                     </div>
                   </div>
                 ))}
 
-                <div className="mt-6 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-xl p-5 border-2 border-emerald-200">
-                  <p className="text-sm text-slate-900">
+                <div className="mt-6 bg-emerald-100/50 rounded-xl p-5 border border-emerald-300">
+                  <p className="text-sm text-slate-700">
                     <span className="font-bold text-emerald-700">🤖 AI-Powered Recommendations</span> - 
                     These courses were specifically selected based on your resume and the job description. 
                     All resources are <span className="font-bold text-emerald-700">100% FREE</span>!
                   </p>
                 </div>
-              </div>
+              </GlassPanel>
             )}
 
             {/* Action Buttons */}
             <div className="flex gap-4">
-              <Link
-                href="/candidate/resume"
-                className="px-6 py-3 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors font-semibold"
-              >
-                Update Resume
+              <Link href="/candidate/resume">
+                <Button variant="secondary">Update Resume</Button>
               </Link>
-              <Link
-                href={`/candidate/job/${selectedJob}`}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
-              >
-                View Job Details
+              <Link href={`/candidate/job/${selectedJob}`}>
+                <Button>View Job Details</Button>
               </Link>
             </div>
           </div>

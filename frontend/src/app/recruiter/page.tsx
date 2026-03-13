@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getRecruiterJobs, createJob } from '@/lib/api'
 import JobCard from '@/components/JobCard'
+import GreetingBanner from '@/components/GreetingBanner'
+import Button from '@/components/ui/Button'
+import StatsCard from '@/components/ui/StatsCard'
+import { Briefcase, TrendingUp, CheckCircle } from 'lucide-react'
 
 export default function RecruiterDashboard() {
   const [mounted, setMounted] = useState(false)
@@ -13,7 +17,7 @@ export default function RecruiterDashboard() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [creating, setCreating] = useState(false)
-  const [userName, setUserName] = useState('Recruiter')
+  const [userName, setUserName] = useState('there')
   const router = useRouter()
 
   useEffect(() => {
@@ -55,78 +59,59 @@ export default function RecruiterDashboard() {
   }
 
   if (!mounted) {
-    return <div className="h-screen bg-slate-950 animate-pulse" />
+    return <div className="h-screen bg-gradient-to-br from-purple-100 via-white to-indigo-100 animate-pulse" />
   }
 
   return (
     <div className="p-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Personalized Greeting */}
-        <div className="glass-card-dark rounded-xl px-6 py-4 mb-8 border border-blue-500/20 bg-gradient-to-r from-blue-900/30 to-transparent">
-          <p className="text-white text-lg font-semibold">
-            Hi {userName} 👋
-          </p>
-          <p className="text-slate-300 text-sm mt-1">
-            Welcome back! Manage your job openings and review qualified candidates.
-          </p>
-        </div>
+        {/* Premium Greeting Banner */}
+        <GreetingBanner name={userName} role="recruiter" />
 
-        {/* Header Section */}
-        <div className="mb-10">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <h1 className="text-5xl font-900 text-white mb-2">Your Jobs</h1>
-              <p className="text-slate-300 text-lg">Manage openings and review applicants</p>
-            </div>
-            <button
-              onClick={() => setShowModal(true)}
-              className="glass-button flex items-center gap-2 whitespace-nowrap h-fit"
-            >
-              <span className="text-xl">+</span>
-              <span>Post New Job</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Total Positions</p>
-            <p className="text-4xl font-900 text-white mt-3">{jobs.length}</p>
-            <p className="text-xs text-slate-400 mt-2">Open opportunities</p>
-          </div>
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Applications</p>
-            <p className="text-4xl font-900 text-blue-300 mt-3">{jobs.reduce((acc, job) => acc + (job.applications_count || 0), 0)}</p>
-            <p className="text-xs text-slate-400 mt-2">Total received</p>
-          </div>
-          <div className="card-dark p-6 rounded-xl">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Quality Rate</p>
-            <p className="text-4xl font-900 text-emerald-300 mt-3">82%</p>
-            <p className="text-xs text-slate-400 mt-2">Match accuracy</p>
-          </div>
+        {/* Key Metrics - Premium Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+          <StatsCard
+            title="Total Positions"
+            value={jobs.length.toString()}
+            subtitle="Open opportunities"
+            icon={<Briefcase className="w-5 h-5" />}
+          />
+          <StatsCard
+            title="Applications"
+            value={jobs.reduce((acc, job) => acc + (job.applications_count || 0), 0).toString()}
+            subtitle="Total received"
+            icon={<TrendingUp className="w-5 h-5" />}
+          />
+          <StatsCard
+            title="Quality Rate"
+            value="82%"
+            subtitle="Match accuracy"
+            icon={<CheckCircle className="w-5 h-5" />}
+          />
         </div>
 
         {/* Jobs Grid */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Job Postings</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">Job Postings</h2>
           
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="rounded-xl p-6 animate-pulse h-72 bg-white/8 backdrop-blur-md border border-white/10" />
+                <div key={i} className="rounded-xl p-6 animate-pulse h-72 bg-white/50 backdrop-blur-md border border-slate-200" />
               ))}
             </div>
           ) : jobs.length === 0 ? (
-            <div className="glass-card-dark rounded-2xl p-16 text-center border-2 border-dashed border-white/20">
-              <p className="text-slate-300 text-lg mb-6">📋 No jobs posted yet</p>
-              <p className="text-slate-400 mb-8 max-w-sm mx-auto">Start recruiting today by posting your first job opening. Use AI-powered matching to find the perfect candidates.</p>
-              <button
+            <div className="rounded-2xl p-16 text-center border-2 border-dashed border-slate-300 bg-white/80 shadow-lg">
+              <p className="text-slate-700 text-lg font-semibold mb-3">📋 No jobs posted yet</p>
+              <p className="text-slate-600 mb-8 max-w-sm mx-auto leading-relaxed">
+                Start recruiting today by posting your first job opening. Use AI-powered matching to find the perfect candidates.
+              </p>
+              <Button 
                 onClick={() => setShowModal(true)}
-                className="glass-button inline-block"
+                className="mx-auto"
               >
                 Post Your First Job
-              </button>
+              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -140,13 +125,13 @@ export default function RecruiterDashboard() {
 
       {/* Post Job Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="glass-card-dark rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/20">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white/70 backdrop-blur-xl border border-slate-200 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-900 text-white">New Job Opening</h2>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">New Job Opening</h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-white/60 hover:text-white transition-colors"
+                className="text-slate-600 hover:text-slate-900 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -155,52 +140,46 @@ export default function RecruiterDashboard() {
             </div>
 
             <form onSubmit={handleCreateJob} className="space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2 uppercase tracking-widest">
-                  Position Title
-                </label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">Position Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="input-premium w-full"
                   placeholder="e.g., Senior React Developer"
+                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-300 mb-2 uppercase tracking-widest">
-                  Job Description
-                </label>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Job Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={8}
-                  className="input-premium w-full resize-none"
+                  className="w-full bg-white/50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent backdrop-blur-xl transition-all"
                   placeholder="Describe the role, responsibilities, and required skills. AI will extract key competencies automatically."
                   required
                 />
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-slate-600 mt-2">
                   💡 Tip: Include required skills, experience level, and key responsibilities for better AI matching
                 </p>
               </div>
 
-              <div className="flex gap-3 justify-end pt-4 border-t border-white/10">
-                <button
-                  type="button"
+              <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
+                <Button
+                  variant="secondary"
                   onClick={() => setShowModal(false)}
-                  className="glass-button-secondary px-6 py-2"
                 >
                   Discard
-                </button>
-                <button
-                  type="submit"
+                </Button>
+                <Button
                   disabled={creating}
-                  className="glass-button px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  type="submit"
                 >
                   {creating ? 'Publishing...' : 'Post Job'}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

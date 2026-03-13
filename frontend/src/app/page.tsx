@@ -1,165 +1,171 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import Navbar from '@/components/Navbar'
+import RobotMascot3D from '@/components/RobotMascot3D'
+import { Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react'
 
-export default function HomePage() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+export default function LandingPage() {
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+    const token = localStorage.getItem('token')
+    const role = localStorage.getItem('role')
+    if (token && role) {
+      setIsLoggedIn(true)
     }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-dark-cinematic">
-      {/* Animated Spotlight Background */}
-      <div className="spotlight" style={{
-        '--x': `${mousePosition.x / window.innerWidth * 100}%`,
-        '--y': `${mousePosition.y / window.innerHeight * 100}%`,
-      } as any} />
+    <>
+      <Navbar />
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Animated Floating Blobs Background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          {/* Purple blob - top left */}
+          <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-br from-purple-400 to-purple-200 opacity-30 blur-3xl animate-[float_8s_ease-in-out_infinite]" />
 
-      {/* Floating Blur Shapes */}
-      <div className="absolute top-10 left-10 w-72 h-72 blur-shape-primary opacity-60" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 blur-shape-secondary opacity-40" />
-      <div className="absolute top-1/2 left-1/3 w-80 h-80 blur-shape-primary opacity-30" />
+          {/* Indigo blob - top right */}
+          <div className="absolute -top-20 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-200 opacity-30 blur-3xl animate-[float_10s_ease-in-out_infinite_2s]" />
 
-      {/* Content Container */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        <div className="max-w-7xl w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Hero Title & Description */}
-            <div className="space-y-8 animate-fade-in">
-              {/* Main Title with Gradient */}
-              <div>
-                <h1 className="text-6xl md:text-8xl font-900 leading-tight">
-                  <span className="bg-gradient-to-r from-white via-blue-200 to-blue-400 bg-clip-text text-transparent">
-                    CAREERO
-                  </span>
-                  <span className="bg-gradient-to-r from-blue-400 to-primary-400 bg-clip-text text-transparent">
-                    AI
+          {/* Purple blob - bottom center */}
+          <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-gradient-to-tr from-purple-300 to-indigo-300 opacity-20 blur-3xl animate-[float_12s_ease-in-out_infinite_4s]" />
+        </div>
+
+        {/* Hero Section */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Hero Content */}
+            <div className="space-y-8">
+              {/* Large CareeroAI Branding */}
+              <div className="space-y-1">
+                <p className="text-sm font-semibold uppercase tracking-widest text-purple-600">
+                  Next generation careers
+                </p>
+                <h1 className="text-6xl lg:text-7xl font-bold">
+                  <span className="block bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                    CareeroAI
                   </span>
                 </h1>
-                <p className="text-xl md:text-2xl text-slate-300 mt-6 font-light tracking-wide">
-                  AI-powered hiring and career intelligence
+              </div>
+
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 border border-purple-200 rounded-full">
+                  <Sparkles className="w-4 h-4 text-purple-600" />
+                  <span className="text-sm font-semibold text-purple-600">AI-Powered Career Intelligence</span>
+                </div>
+
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+                  Your AI Career Intelligence Platform
+                </h2>
+
+                <p className="text-xl text-slate-600 max-w-xl leading-relaxed">
+                  Discover the perfect career match powered by advanced AI. Get personalized recommendations, master in-demand skills, and accelerate your growth.
                 </p>
               </div>
 
-              {/* Description */}
-              <p className="text-lg text-slate-300 leading-relaxed max-w-xl">
-                Discover the right opportunities or find the perfect talent. CareeroAI uses advanced AI matching, resume intelligence, and skill gap analysis to transform hiring and careers.
-              </p>
-
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Link href="/signup">
-                  <button className="glass-button w-full sm:w-auto">
-                    Get Started →
+              {isLoggedIn ? (
+                <div className="flex flex-wrap gap-4 pt-4">
+                  <button
+                    onClick={() => {
+                      const role = localStorage.getItem('role')
+                      router.push(role === 'recruiter' ? '/recruiter' : '/candidate')
+                    }}
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-xl hover:shadow-purple-500/50 hover:scale-[1.05] transition-all duration-300 font-semibold group"
+                  >
+                    Go to Dashboard
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                   </button>
-                </Link>
-                <Link href="/login">
-                  <button className="glass-button-secondary w-full sm:w-auto">
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-4 pt-4">
+                  <Link
+                    href="/signup"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-xl hover:shadow-purple-500/50 hover:scale-[1.05] transition-all duration-300 font-semibold group"
+                  >
+                    Start Free Today
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-white/80 text-purple-600 border-2 border-purple-600 rounded-lg hover:bg-white hover:shadow-lg transition-all duration-300 font-semibold backdrop-blur-xl"
+                  >
                     Sign In
-                  </button>
-                </Link>
-              </div>
+                  </Link>
+                </div>
+              )}
 
-              {/* Secondary Text */}
-              <p className="text-sm text-slate-400 font-medium">
-                ✨ Join thousands of professionals and companies transforming their careers
-              </p>
-            </div>
-
-            {/* Right Side - Premium Dashboard Preview */}
-            <div className="relative h-full min-h-[500px] hidden lg:flex items-center justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
-              {/* Floating Glassmorphism Card */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-full max-w-sm">
-                  {/* Card Background Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-primary-600/20 rounded-3xl blur-3xl" />
-
-                  {/* Glass Card - Dark Theme */}
-                  <div className="relative glass-card-dark p-8 space-y-6 border border-blue-500/30">
-                    {/* Header with Icon */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/40 to-primary-500/30 flex items-center justify-center">
-                        <span className="text-2xl">🚀</span>
-                      </div>
-                      <div>
-                        <div className="h-2 w-32 bg-gradient-to-r from-blue-400 to-primary-400 rounded-full" />
-                        <div className="h-2 w-24 bg-slate-500/50 rounded-full mt-2" />
-                      </div>
-                    </div>
-
-                    {/* AI Insights Feature List */}
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-500/30 flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-lg">🎯</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="h-2 w-32 bg-slate-400/60 rounded-full" />
-                          <div className="h-2 w-24 bg-slate-500/40 rounded-full mt-1.5" />
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-lg">✨</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="h-2 w-32 bg-slate-400/60 rounded-full" />
-                          <div className="h-2 w-20 bg-slate-500/40 rounded-full mt-1.5" />
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-amber-500/30 flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-lg">⚡</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="h-2 w-32 bg-slate-400/60 rounded-full" />
-                          <div className="h-2 w-28 bg-slate-500/40 rounded-full mt-1.5" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-6 border-t border-blue-500/20">
-                      <div className="h-2.5 w-40 bg-gradient-to-r from-blue-400/60 to-primary-400/40 rounded-full" />
-                    </div>
-                  </div>
+              {/* Features List */}
+              <div className="space-y-3 pt-8">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700 font-medium">AI analyzes your skills and experience</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700 font-medium">Get personalized job recommendations</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700 font-medium">Learn skills to advance your career</span>
                 </div>
               </div>
             </div>
+
+            {/* Right Side - Animated Robot Mascot */}
+            <div className="relative hidden lg:flex justify-center items-start pt-8">
+              <div className="w-full h-96">
+                <RobotMascot3D />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Why Choose CareeroAI?</h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+              Powered by advanced AI to help you find the perfect career match
+            </p>
           </div>
 
-          {/* Bottom Stats - Enhanced */}
-          <div className="mt-20 pt-20 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center group">
-              <div className="text-4xl font-900 bg-gradient-to-r from-blue-400 to-primary-400 bg-clip-text text-transparent">10K+</div>
-              <div className="text-sm text-slate-400 mt-2 group-hover:text-slate-300 transition-colors">Active Users</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-4xl font-900 bg-gradient-to-r from-blue-400 to-primary-400 bg-clip-text text-transparent">500+</div>
-              <div className="text-sm text-slate-400 mt-2 group-hover:text-slate-300 transition-colors">Companies</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-4xl font-900 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">98%</div>
-              <div className="text-sm text-slate-400 mt-2 group-hover:text-slate-300 transition-colors">Match Rate</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-4xl font-900 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">24/7</div>
-              <div className="text-sm text-slate-400 mt-2 group-hover:text-slate-300 transition-colors">AI Support</div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'Smart Matching',
+                description: 'AI analyzes your skills and finds jobs that align with your goals',
+                icon: '🎯',
+              },
+              {
+                title: 'Skill Gap Analysis',
+                description: 'Get insights into skills you need to learn and free courses to master them',
+                icon: '📊',
+              },
+              {
+                title: 'AI Interviews',
+                description: 'Practice mock interviews with AI and get real-time feedback',
+                icon: '🎤',
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="group bg-white rounded-2xl shadow-lg p-8 border border-slate-200 hover:border-purple-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              >
+                <div className="text-5xl mb-4 group-hover:scale-110 transition duration-300">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{feature.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
+
+
       </div>
-    </main>
+    </>
   )
 }
-

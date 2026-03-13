@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Button from '@/components/ui/Button'
+import { LogOut } from 'lucide-react'
 
 export default function ProfilePage() {
 
@@ -53,7 +55,7 @@ export default function ProfilePage() {
   // ----------------------------------
   const handleLogout = () => {
     localStorage.clear()
-    router.push('/login')
+    router.push('/')
   }
 
   return (
@@ -68,7 +70,7 @@ export default function ProfilePage() {
           Manage your account settings
         </p>
 
-        <div className="glass rounded-2xl p-8 space-y-6">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-slate-200 p-8 space-y-6 shadow-lg">
 
           {/* Account Info */}
           <div>
@@ -78,60 +80,53 @@ export default function ProfilePage() {
 
             <div className="space-y-4">
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email
-                </label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">Email</label>
                 <input
                   type="email"
                   value={profile.email}
                   disabled
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50"
+                  placeholder="your@email.com"
+                  className="w-full px-4 py-3 bg-white/30 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Name
-                </label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">Name</label>
                 <input
                   type="text"
                   value={profile.name}
                   onChange={(e) =>
                     setProfile({ ...profile, name: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Your name"
+                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Phone
-                </label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">Phone</label>
                 <input
                   type="tel"
                   value={profile.phone}
                   onChange={(e) =>
                     setProfile({ ...profile, phone: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="+1 234 567 8900"
+                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Location
-                </label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">Location</label>
                 <input
                   type="text"
                   value={profile.location}
                   onChange={(e) =>
                     setProfile({ ...profile, location: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="City, Country"
+                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
                 />
               </div>
 
@@ -139,22 +134,23 @@ export default function ProfilePage() {
           </div>
 
           {/* Actions */}
-          <div className="pt-6 border-t border-slate-200 space-y-4">
+          <div className="pt-6 border-t border-slate-200 space-y-3 flex flex-col sm:flex-row gap-3">
 
-            <button
+            <Button
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Profile'}
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="secondary"
               onClick={handleLogout}
-              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="flex items-center justify-center gap-2"
             >
+              <LogOut className="w-4 h-4" />
               Logout
-            </button>
+            </Button>
 
           </div>
 

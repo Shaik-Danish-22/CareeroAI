@@ -24,12 +24,12 @@ export default function CandidateLayout({ children }: { children: React.ReactNod
 
   if (isChecking) {
     return (
-      <div className="h-screen bg-dark-cinematic flex items-center justify-center">
+      <div className="h-screen bg-gradient-to-br from-purple-100 via-white to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin inline-flex items-center justify-center w-12 h-12 mb-4">
-            <div className="w-12 h-12 border-4 border-blue-500/30 border-t-primary-400 rounded-full" />
+            <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full" />
           </div>
-          <p className="text-slate-300 font-medium">Loading your dashboard...</p>
+          <p className="text-slate-600 font-medium">Loading your dashboard...</p>
         </div>
       </div>
     )
@@ -37,26 +37,26 @@ export default function CandidateLayout({ children }: { children: React.ReactNod
 
   if (!isAuthorized) {
     return (
-      <div className="h-screen bg-dark-cinematic flex items-center justify-center">
+      <div className="h-screen bg-gradient-to-br from-purple-100 via-white to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin inline-flex items-center justify-center w-12 h-12 mb-4">
-            <div className="w-12 h-12 border-4 border-blue-500/30 border-t-primary-400 rounded-full" />
+            <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full" />
           </div>
-          <p className="text-slate-300 font-medium">Verifying access...</p>
+          <p className="text-slate-600 font-medium">Verifying access...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-dark-cinematic overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-purple-100 via-white to-indigo-100 overflow-hidden">
       {/* Sidebar */}
-      <div className="flex-shrink-0 border-r border-white/10">
+      <div className="flex-shrink-0 border-r border-slate-200">
         <Sidebar role="candidate" />
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-auto transition-smooth bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950">
+      <main className="flex-1 overflow-auto transition-smooth bg-gradient-to-br from-purple-100 via-white to-indigo-100">
         {children}
       </main>
 
