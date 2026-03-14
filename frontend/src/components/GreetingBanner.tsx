@@ -34,42 +34,22 @@ export default function GreetingBanner({ name = 'there', role = 'candidate' }: G
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-lg p-8 mb-8">
-      {/* Subtle gradient glow */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-50/40 via-transparent to-indigo-50/40 pointer-events-none" />
-
-      {/* Content */}
-      <div className="relative z-10">
-        <div className="flex items-start justify-between gap-6">
-          <div className="flex-1">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">
-              {getGreeting()}, <span className="font-bold">{name}</span> 👋
-            </h1>
-            <p className="text-lg text-slate-700 font-medium mb-4">
-              Welcome back to CareeroAI
-            </p>
-            <p className="text-slate-600">
-              {getSubtitle()}
-            </p>
-          </div>
-
-          {/* Status indicator */}
-          <div className="flex-shrink-0">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 border border-purple-300 flex items-center justify-center text-2xl shadow-lg shadow-purple-200/40">
-              ✨
-            </div>
-          </div>
+    <div className="rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg p-6 mb-8 border border-white/40">
+      <div className="flex justify-between items-center">
+        {/* Left side - Greeting text */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">
+            {getGreeting()}, {name} 👋
+          </h1>
+          <p className="text-gray-500">
+            {getSubtitle()}
+          </p>
         </div>
 
-        {/* Quick stats or actions */}
-        <div className="mt-6 flex flex-wrap gap-3">
-          <div className="px-4 py-2 rounded-full bg-purple-50 border border-purple-200 text-xs text-slate-700 font-medium">
-            ✓ AI Assistant Ready
-          </div>
-          <div className="px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-xs text-slate-700 font-medium">
-            🎯 Personalized Insights
-          </div>
-        </div>
+        {/* Right side - Sparkle icon button */}
+        <button className="rounded-xl bg-purple-100 p-3 hover:bg-purple-200 transition-colors flex-shrink-0">
+          ✨
+        </button>
       </div>
     </div>
   )

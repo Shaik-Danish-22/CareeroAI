@@ -155,9 +155,11 @@ export default function RecommendationsPage() {
   const fetchRecommendations = async () => {
     try {
       const response = await getRecommendations()
+      console.log("🎯 Fetched recommendations from API:", response.data)
       const jobsData = Array.isArray(response.data) 
         ? response.data 
         : (response.data?.recommendations || [])
+      console.log("✅ Parsed recommendations for display:", jobsData)
       setRecommendations(jobsData)
     } catch (error) {
       console.error('Failed to fetch recommendations:', error)
@@ -189,8 +191,8 @@ export default function RecommendationsPage() {
     return (
       <div className="p-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Job Recommendations</h1>
-          <p className="text-slate-600 mb-8">Jobs matched to your skills and experience</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Job Recommendations</h1>
+          <p className="text-slate-600 dark:text-slate-300 mb-8">Jobs matched to your skills and experience</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <Card key={i} className="animate-pulse">
@@ -207,12 +209,12 @@ export default function RecommendationsPage() {
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Job Recommendations</h1>
-        <p className="text-slate-600 mb-8">Jobs matched to your skills and experience</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Job Recommendations</h1>
+        <p className="text-slate-600 dark:text-slate-300 mb-8">Jobs matched to your skills and experience</p>
 
         {recommendations.length === 0 ? (
           <GlassPanel className="rounded-2xl p-12 text-center">
-            <p className="text-slate-600 mb-4">
+            <p className="text-slate-600 dark:text-slate-300 mb-4">
               No recommendations yet. Complete your resume to get personalized job matches!
             </p>
             <Button onClick={() => router.push('/candidate/resume')}>
@@ -229,7 +231,7 @@ export default function RecommendationsPage() {
                 </div>
                 
                 {/* Job Title */}
-                <h3 className="text-xl font-semibold text-slate-900 mb-2 pr-20">{job.title}</h3>
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 pr-20">{job.title}</h3>
                 
                 {/* Location Badge */}
                 <div className="mb-3">
@@ -241,7 +243,7 @@ export default function RecommendationsPage() {
                 {/* Skills */}
                 {(job.skills || job.matched_skills) && (job.skills?.length > 0 || job.matched_skills?.length > 0) && (
                   <div className="mb-4">
-                    <p className="text-sm font-semibold text-slate-700 mb-2">
+                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       {job.matched_skills ? 'Your Matching Skills:' : 'Required Skills:'}
                     </p>
                     <div className="flex flex-wrap gap-2">

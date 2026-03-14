@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { login } from '@/lib/api'
 import { Eye, EyeOff } from 'lucide-react'
+import DarkModeToggle from '@/components/DarkModeToggle'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -41,28 +42,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-purple-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-300">
+      <DarkModeToggle />
+      
       {/* Login Card Container */}
       <div className="w-full max-w-md">
         {/* Background Glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 via-white/0 to-indigo-200/40 rounded-3xl blur-3xl -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 dark:from-purple-900/20 via-white/0 dark:via-transparent to-indigo-200/40 dark:to-indigo-900/20 rounded-3xl blur-3xl -z-10" />
 
-        {/* Glass Panel - Light Theme */}
-        <div className="relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-8 space-y-6">
+        {/* Glass Panel */}
+        <div className="relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 dark:border-slate-700/40 p-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
               CareeroAI
             </h1>
-            <p className="text-sm text-slate-600 font-medium">
+            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
               Welcome back
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm text-red-700 font-medium flex items-center gap-2">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl">
+              <p className="text-sm text-red-700 dark:text-red-300 font-medium flex items-center gap-2">
                 <span>⚠️</span>
                 {error}
               </p>
@@ -73,7 +76,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Email Address
               </label>
               <input
@@ -81,14 +84,14 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
+                className="w-full px-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
                 required
               />
             </div>
 
             {/* Password Input with Visibility Toggle */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Password
               </label>
               <div className="relative">
@@ -97,13 +100,13 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400 pr-12"
+                  className="w-full px-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 pr-12"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-900 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -119,11 +122,11 @@ export default function LoginPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input 
                   type="checkbox" 
-                  className="w-4 h-4 rounded border-slate-300 accent-purple-600" 
+                  className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 accent-purple-600" 
                 />
-                <span className="text-slate-600">Remember me</span>
+                <span className="text-slate-600 dark:text-slate-400">Remember me</span>
               </label>
-              <Link href="#" className="text-purple-600 hover:text-purple-700 font-medium transition-colors">
+              <Link href="#" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium transition-colors">
                 Forgot?
               </Link>
             </div>
@@ -140,22 +143,22 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-500 font-medium">OR</span>
-            <div className="flex-1 h-px bg-slate-200" />
+            <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">OR</span>
+            <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
           </div>
 
           {/* Footer */}
-          <p className="text-center text-sm text-slate-600">
+          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
             Don't have an account?{' '}
-            <Link href="/signup" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+            <Link href="/signup" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
               Create one
             </Link>
           </p>
         </div>
 
         {/* Bottom Text */}
-        <p className="text-center text-xs text-slate-600 mt-6">
+        <p className="text-center text-xs text-slate-600 dark:text-slate-400 mt-6">
           By signing in, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>
