@@ -29,7 +29,12 @@ export default function CandidateDashboard() {
   const fetchRecommendations = async () => {
     try {
       const response = await getRecommendations()
-      setRecommendations(response.data || [])
+      console.log("📊 Fetched recommendations:", response.data)
+      const jobsData = Array.isArray(response.data) 
+        ? response.data 
+        : (response.data?.recommendations || [])
+      console.log("✅ Jobs to display:", jobsData)
+      setRecommendations(jobsData)
     } catch (error) {
       console.error('Failed to fetch recommendations:', error)
     } finally {
@@ -38,14 +43,14 @@ export default function CandidateDashboard() {
   }
 
   return (
-    <div className="p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="p-8 min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-10">
 
         {/* Greeting */}
         <GreetingBanner name={userName} role="candidate" />
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <StatsCard
             title="Found Matches"
             value={recommendations.length}
@@ -70,45 +75,49 @@ export default function CandidateDashboard() {
 
         {/* Recommendations */}
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">
             Recommended Jobs
           </h2>
 
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1,2,3,4,5,6].map((i) => (
-                <div key={i} className="h-64 bg-white rounded-2xl border border-slate-200 shadow-lg animate-pulse" />
+                <div key={i} className="h-64 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg animate-pulse" />
               ))}
             </div>
 
           ) : recommendations.length > 0 ? (
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendations.map((job: any) => (
-                <JobCard
-                  key={job.job_id}
-                  job={{
-                    id: job.job_id,
-                    title: job.title,
-                    description: job.description,
-                    location: job.location || 'Remote',
-                    job_type: 'Full-time',
-                    skills: job.skills || [],
-                    match_percentage: job.match_score,
-                  }}
-                  variant="candidate"
-                />
-              ))}
+              {recommendations.map((job: any) => {
+                const jobId = job.job_id || job.id
+                console.log("🎨 Rendering job:", jobId, job.title)
+                return (
+                  <JobCard
+                    key={jobId}
+                    job={{
+                      id: jobId,
+                      title: job.title,
+                      description: job.description,
+                      location: job.location || 'Remote',
+                      job_type: 'Full-time',
+                      skills: job.skills || [],
+                      match_percentage: job.match_score,
+                    }}
+                    variant="candidate"
+                  />
+                )
+              })}
             </div>
 
           ) : (
 
-            <Card className="p-16 text-center border-dashed border-2">
-              <p className="text-slate-900 text-2xl font-bold mb-3">
+            <Card className="p-16 text-center border-dashed border-2 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
+              <p className="text-slate-900 dark:text-white text-2xl font-bold mb-3">
                 📄 No Recommendations Yet
               </p>
 
-              <p className="text-slate-600 mb-8">
+              <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-xl mx-auto">
                 Complete your resume and skills to unlock personalized job recommendations powered by AI
               </p>
 

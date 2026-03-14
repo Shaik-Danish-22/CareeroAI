@@ -58,11 +58,11 @@ export default function LandingPage() {
                   <span className="text-sm font-semibold text-purple-600">AI-Powered Career Intelligence</span>
                 </div>
 
-                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
                   Your AI Career Intelligence Platform
                 </h2>
 
-                <p className="text-xl text-slate-600 max-w-xl leading-relaxed">
+                <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed">
                   Discover the perfect career match powered by advanced AI. Get personalized recommendations, master in-demand skills, and accelerate your growth.
                 </p>
               </div>
@@ -154,11 +154,11 @@ export default function LandingPage() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-2xl shadow-lg p-8 border border-slate-200 hover:border-purple-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                className="group bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
               >
                 <div className="text-5xl mb-4 group-hover:scale-110 transition duration-300">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>

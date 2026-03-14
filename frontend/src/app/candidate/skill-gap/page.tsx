@@ -22,10 +22,11 @@ export default function SkillGapAnalysisPage() {
   const fetchJobs = async () => {
     try {
       const response = await getRecommendations()
+      console.log("📚 Fetched skill gap jobs:", response.data)
       const jobsData = Array.isArray(response.data) 
         ? response.data 
         : (response.data?.recommendations || [])
-      
+      console.log("✅ Jobs for skill gap analysis:", jobsData)
       setJobs(jobsData)
     } catch (error) {
       console.error('Failed to fetch jobs:', error)
@@ -51,14 +52,14 @@ export default function SkillGapAnalysisPage() {
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Skill Gap Analysis</h1>
-        <p className="text-slate-600 mb-8">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Skill Gap Analysis</h1>
+        <p className="text-slate-600 dark:text-slate-300 mb-8">
           Compare your skills with job requirements and get personalized learning recommendations
         </p>
 
         {/* Job Selection */}
         <GlassPanel className="rounded-2xl p-6 mb-6">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Select a Job to Analyze</h2>
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Select a Job to Analyze</h2>
           {initialLoading ? (
             <div className="animate-pulse space-y-3">
               <div className="h-12 bg-slate-200 rounded-lg" />
@@ -79,8 +80,8 @@ export default function SkillGapAnalysisPage() {
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-semibold text-slate-900">{job.title}</h3>
-                      <p className="text-sm text-slate-600">
+                      <h3 className="font-semibold text-slate-900 dark:text-white">{job.title}</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
                         {job.company || 'Company'} • {job.location}
                       </p>
                     </div>
@@ -95,7 +96,7 @@ export default function SkillGapAnalysisPage() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-slate-600 mb-4">No job recommendations available yet.</p>
+              <p className="text-slate-600 dark:text-slate-300 mb-4">No job recommendations available yet.</p>
               <Link href="/candidate/resume">
                 <Button>Complete Your Resume</Button>
               </Link>
@@ -107,7 +108,7 @@ export default function SkillGapAnalysisPage() {
         {loading && (
           <GlassPanel className="rounded-2xl p-8 flex items-center justify-center gap-4">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500" />
-            <span className="text-slate-700">Analyzing your skills...</span>
+            <span className="text-slate-700 dark:text-slate-300">Analyzing your skills...</span>
           </GlassPanel>
         )}
 
@@ -116,7 +117,7 @@ export default function SkillGapAnalysisPage() {
           <div className="space-y-6">
             {/* Match Score */}
             <GlassPanel className="rounded-2xl p-6">
-              <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5" />
                 Overall Match Score
               </h2>
@@ -145,13 +146,13 @@ export default function SkillGapAnalysisPage() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-slate-900">
+                    <span className="text-3xl font-bold text-slate-900 dark:text-white">
                       {Math.round(skillGapData.match_score || 0)}%
                     </span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-lg text-slate-700">
+                  <p className="text-lg text-slate-700 dark:text-slate-300">
                     {skillGapData.match_score >= 80
                       ? '🎉 Excellent match! You have most of the required skills.'
                       : skillGapData.match_score >= 60
@@ -165,7 +166,7 @@ export default function SkillGapAnalysisPage() {
             {/* Matching Skills */}
             {skillGapData.matching_skills?.length > 0 && (
               <GlassPanel className="rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-emerald-600" />
                   Skills You Have
                 </h2>
@@ -185,7 +186,7 @@ export default function SkillGapAnalysisPage() {
             {/* Missing Skills */}
             {skillGapData.missing_skills?.length > 0 && (
               <GlassPanel className="rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-blue-600" />
                   Skills to Learn
                 </h2>
@@ -199,8 +200,8 @@ export default function SkillGapAnalysisPage() {
                     </span>
                   ))}
                 </div>
-                <div className="bg-purple-100/50 rounded-xl p-4 border border-purple-300">
-                  <p className="text-sm text-slate-700">
+                <div className="bg-purple-100/50 dark:bg-purple-900/20 rounded-xl p-4 border border-purple-300 dark:border-purple-700">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     💡 <strong>Tip:</strong> Focus on learning these skills to increase your match score!
                   </p>
                 </div>
@@ -210,7 +211,7 @@ export default function SkillGapAnalysisPage() {
             {/* AI Course Recommendations */}
             {skillGapData.recommendations && skillGapData.recommendations.length > 0 && (
               <GlassPanel className="rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-purple-600" />
                   AI-Recommended Free Courses
                 </h2>
@@ -222,7 +223,7 @@ export default function SkillGapAnalysisPage() {
                       <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-bold text-lg border border-purple-300">
                         {item.skill}
                       </span>
-                      <span className="text-sm text-slate-600">
+                      <span className="text-sm text-slate-600 dark:text-slate-400">
                         {item.courses?.length || 0} free resources
                       </span>
                     </div>
@@ -271,11 +272,11 @@ export default function SkillGapAnalysisPage() {
                   </div>
                 ))}
 
-                <div className="mt-6 bg-emerald-100/50 rounded-xl p-5 border border-emerald-300">
-                  <p className="text-sm text-slate-700">
-                    <span className="font-bold text-emerald-700">🤖 AI-Powered Recommendations</span> - 
+                <div className="mt-6 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-xl p-5 border border-emerald-300 dark:border-emerald-700">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400">🤖 AI-Powered Recommendations</span> - 
                     These courses were specifically selected based on your resume and the job description. 
-                    All resources are <span className="font-bold text-emerald-700">100% FREE</span>!
+                    All resources are <span className="font-bold text-emerald-700 dark:text-emerald-400">100% FREE</span>!
                   </p>
                 </div>
               </GlassPanel>

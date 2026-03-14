@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { register } from '@/lib/api'
 import { Eye, EyeOff } from 'lucide-react'
+import DarkModeToggle from '@/components/DarkModeToggle'
 
 export default function SignupPage() {
   const [mounted, setMounted] = useState(false)
@@ -23,7 +24,7 @@ export default function SignupPage() {
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-gradient-to-br from-purple-100 via-white to-indigo-100 animate-pulse" />
+    return <div className="min-h-screen bg-gradient-to-br from-purple-100 dark:from-slate-900 via-white dark:via-slate-800 to-indigo-100 dark:to-slate-900 animate-pulse" />
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,28 +64,30 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-purple-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-300">
+      <DarkModeToggle />
+      
       {/* Signup Card Container */}
       <div className="w-full max-w-md">
         {/* Background Glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 via-white/0 to-indigo-200/40 rounded-3xl blur-3xl -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 dark:from-purple-900/20 via-white/0 dark:via-transparent to-indigo-200/40 dark:to-indigo-900/20 rounded-3xl blur-3xl -z-10" />
 
-        {/* Glass Panel - Light Theme */}
-        <div className="relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-8 space-y-6">
+        {/* Glass Panel */}
+        <div className="relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 dark:border-slate-700/40 p-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
               CareeroAI
             </h1>
-            <p className="text-sm text-slate-600 font-medium">
-              Create your account
+            <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">
+              Create your career account
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm text-red-700 font-medium flex items-center gap-2">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl">
+              <p className="text-sm text-red-700 dark:text-red-300 font-medium flex items-center gap-2">
                 <span>⚠️</span>
                 {error}
               </p>
@@ -95,7 +98,7 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Role Selection */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 block">
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block">
                 I am a
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -104,8 +107,8 @@ export default function SignupPage() {
                   onClick={() => setRole('candidate')}
                   className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 ${
                     role === 'candidate'
-                      ? 'border-purple-600 bg-purple-50 text-purple-600 shadow-lg shadow-purple-500/20'
-                      : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                      ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 shadow-lg shadow-purple-500/20'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   <span className="text-lg block mb-1">👩‍💼</span>
@@ -116,8 +119,8 @@ export default function SignupPage() {
                   onClick={() => setRole('recruiter')}
                   className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all duration-200 ${
                     role === 'recruiter'
-                      ? 'border-emerald-600 bg-emerald-50 text-emerald-600 shadow-lg shadow-emerald-500/20'
-                      : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-300 shadow-lg shadow-emerald-500/20'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   <span className="text-lg block mb-1">💼</span>
@@ -128,7 +131,7 @@ export default function SignupPage() {
 
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Email Address
               </label>
               <input
@@ -136,14 +139,14 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400"
+                className="w-full px-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
                 required
               />
             </div>
 
             {/* Password Input with Visibility Toggle */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Password
               </label>
               <div className="relative">
@@ -152,14 +155,14 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400 pr-12"
+                  className="w-full px-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 pr-12"
                   minLength={6}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-900 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -172,7 +175,7 @@ export default function SignupPage() {
 
             {/* Confirm Password Input with Visibility Toggle */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Confirm Password
               </label>
               <div className="relative">
@@ -181,13 +184,13 @@ export default function SignupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 placeholder-slate-400 pr-12"
+                  className="w-full px-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 pr-12"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-900 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -210,15 +213,15 @@ export default function SignupPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-500 font-medium">OR</span>
-            <div className="flex-1 h-px bg-slate-200" />
+            <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">OR</span>
+            <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
           </div>
 
           {/* Footer */}
-          <p className="text-center text-sm text-slate-600">
+          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
             Already have an account?{' '}
-            <Link href="/login" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+            <Link href="/login" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">
               Sign in
             </Link>
           </p>
